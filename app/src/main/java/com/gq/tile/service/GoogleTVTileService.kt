@@ -8,7 +8,6 @@ import android.graphics.drawable.Icon
 import android.os.Build
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
-import android.util.Log
 import androidx.core.net.toUri
 import com.gq.tile.R
 
@@ -19,12 +18,13 @@ class GoogleTVTileService : TileService() {
     private val GoogleTVVirtualRemoteAction = "com.google.android.apps.googletv.ACTION_VIRTUAL_REMOTE"
 
 
-    override fun onTileAdded() {
-        super.onTileAdded()
-        qsTile?.apply {
+    override fun onStartListening() {
+        super.onStartListening()
+        qsTile.apply {
+            val enable = isAppInstalledAndEnabled()
             label = "Google TV"
-            icon = Icon.createWithResource(this@GoogleTVTileService, R.drawable.ic_tv) // 你自己的图标
-            state = Tile.STATE_ACTIVE
+            icon = Icon.createWithResource(this@GoogleTVTileService, R.drawable.ic_tv)
+            state = if (enable) Tile.STATE_ACTIVE else Tile.STATE_INACTIVE
             updateTile()
         }
     }
@@ -59,7 +59,6 @@ class GoogleTVTileService : TileService() {
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            Log.d("GoogleTVTileService", "Google TV 未安装")
             startGoogleTVSystemSettingPage()
         }
     }
@@ -82,7 +81,6 @@ class GoogleTVTileService : TileService() {
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            Log.d("GoogleTVTileService", "Google TV 未安装")
         }
     }
 

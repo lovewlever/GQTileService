@@ -13,8 +13,10 @@ class VolumeTileService : TileService() {
 
     override fun onStartListening() {
         super.onStartListening()
+        val audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
+        val currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
         qsTile.state = Tile.STATE_ACTIVE
-        qsTile.label = "音量"
+        qsTile.label = "音量(${currentVolume})"
         qsTile.icon = Icon.createWithResource(this, R.drawable.text_to_speech_24dp)
         qsTile.updateTile()
     }
@@ -22,11 +24,10 @@ class VolumeTileService : TileService() {
     override fun onClick() {
         super.onClick()
         val audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
-        // 增大音量（或减小），系统会弹出音量条
         audioManager.adjustStreamVolume(
             AudioManager.STREAM_MUSIC,
-            AudioManager.ADJUST_LOWER,  // 或 ADJUST_LOWER
-            AudioManager.FLAG_SHOW_UI   // 显示系统音量 UI
+            AudioManager.ADJUST_LOWER,
+            AudioManager.FLAG_SHOW_UI
         )
         collapseStatusBar()
     }

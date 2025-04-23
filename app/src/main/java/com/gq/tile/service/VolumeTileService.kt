@@ -15,9 +15,9 @@ class VolumeTileService : TileService() {
         super.onStartListening()
         val audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
         val currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
-        qsTile.state = Tile.STATE_ACTIVE
+        qsTile.state = if (currentVolume <= 0) Tile.STATE_INACTIVE else Tile.STATE_ACTIVE
         qsTile.label = "音量(${currentVolume})"
-        qsTile.icon = Icon.createWithResource(this, R.drawable.text_to_speech_24dp)
+        qsTile.icon = Icon.createWithResource(this, if (currentVolume <= 0) R.drawable.text_to_speech_24dp_mute else R.drawable.text_to_speech_24dp)
         qsTile.updateTile()
     }
 
